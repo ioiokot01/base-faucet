@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Token Faucet · Base</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="app">
+      <header class="header">
+        <h1>🚰 Token Faucet</h1>
+        <p class="subtitle">Claim free test tokens on Base.</p>
+        <button id="connectBtn" class="btn">Connect Wallet</button>
+        <p id="account" class="account hidden"></p>
+      </header>
+
+      <section class="balance-card">
+        <span class="balance-label">Your balance</span>
+        <span id="balance" class="balance-value">— <span id="symbol"></span></span>
+      </section>
+
+      <section class="claim-card">
+        <p class="claim-info">
+          Claim <strong id="claimAmount">—</strong> tokens every
+          <strong id="cooldownText">—</strong>.
+        </p>
+        <button id="claimBtn" class="btn btn-big" disabled>Claim 🚰</button>
+        <p id="timer" class="timer"></p>
+      </section>
+
+      <p id="status" class="status"></p>
+
+      <section class="stats">
+        <div class="stat">
+          <span class="stat-label">Total minted</span>
+          <span id="totalSupply" class="stat-value">—</span>
+        </div>
+        <div class="stat">
+          <span class="stat-label">Remaining</span>
+          <span id="remaining" class="stat-value">—</span>
+        </div>
+      </section>
+    </main>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.13.4/ethers.umd.min.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
