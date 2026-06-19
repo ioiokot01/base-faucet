@@ -26,6 +26,7 @@ const ABI = [
 let provider, signer, contract, account;
 let symbol = "";
 let countdownTimer = null;
+let tokenDecimals = 18;
 
 const els = {
   connectBtn: document.getElementById("connectBtn"),
@@ -39,6 +40,7 @@ const els = {
   status: document.getElementById("status"),
   totalSupply: document.getElementById("totalSupply"),
   remaining: document.getElementById("remaining"),
+  watchBtn: document.getElementById("watchBtn"),
 };
 
 // ---------------------------------------------------------------------------
@@ -109,6 +111,7 @@ async function connect() {
 
     await loadConfig();
     await refresh();
+    els.watchBtn.classList.remove("hidden");
     contract.on("Claimed", () => refresh());
   } catch (err) {
     setStatus(err.shortMessage || err.message || "Failed to connect.", "error");
@@ -216,12 +219,34 @@ async function claim() {
   }
 }
 
+// Ask the wallet to track this ERC-20 so the token shows up in its asset list.
+async function watchAsset() {
+  if (!window.ethereum) return;
+  try {
+    await window.ethereum.request({
+      method: "wallet_watchAsset",
+      params: {
+        type: "ERC20",
+        options: {
+          address: CONTRACT_ADDRESS,
+          symbol: symbol,
+          decimals: tokenDecimals,
+        },
+      },
+    });
+    setStatus("Token added to your wallet.", "ok");
+  } catch (err) {
+    setStatus(err.shortMessage || err.message || "Could not add token.", "error");
+  }
+}
+
 // ---------------------------------------------------------------------------
 // UI wiring
 // ---------------------------------------------------------------------------
 
 els.connectBtn.addEventListener("click", connect);
 els.claimBtn.addEventListener("click", claim);
+els.watchBtn.addEventListener("click", watchAsset);
 
 if (window.ethereum) {
   window.ethereum.on?.("accountsChanged", () => window.location.reload());
