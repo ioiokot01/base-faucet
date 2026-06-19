@@ -1,5 +1,10 @@
 # Token Faucet
 
+[![CI](https://github.com/ioiokot01/base-faucet/actions/workflows/ci.yml/badge.svg)](https://github.com/ioiokot01/base-faucet/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+![Solidity](https://img.shields.io/badge/Solidity-0.8.24-363636.svg)
+![Chain](https://img.shields.io/badge/Base-Sepolia-0052ff.svg)
+
 An **ERC-20 token with a built-in faucet** for the [Base](https://base.org)
 ecosystem. Anyone can `claim()` a fixed amount of tokens, but only once per
 cooldown window. Total supply is capped, and tokens are minted on claim (no
