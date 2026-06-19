@@ -143,5 +143,35 @@ describe("FaucetToken", function () {
         ethers.parseEther("60")
       );
     });
+
+    it("supports approve + transferFrom", async function () {
+      const { token, alice, bob } = await deploy();
+      await token.connect(alice).claim();
+
+      const amount = ethers.parseEther("25");
+      await token.connect(alice).approve(bob.address, amount);
+      expect(await token.allowance(alice.address, bob.address)).to.equal(amount);
+
+      await token
+        .connect(bob)
+        .transferFrom(alice.address, bob.address, amount);
+      expect(await token.balanceOf(bob.address)).to.equal(amount);
+      expect(await token.allowance(alice.address, bob.address)).to.equal(0n);
+    });
+  });
+
+  describe("Claim bookkeeping", function () {
+    it("records lastClaim and a future nextClaimAt after claiming", async function () {
+      const { token, alice } = await deploy();
+      expect(await token.lastClaim(alice.address)).to.equal(0n);
+      expect(await token.nextClaimAt(alice.address)).to.equal(0n);
+
+      await token.connect(alice).claim();
+      const last = await token.lastClaim(alice.address);
+      expect(last).to.be.greaterThan(0n);
+      expect(await token.nextClaimAt(alice.address)).to.equal(
+        last + BigInt(COOLDOWN)
+      );
+    });
   });
 });
